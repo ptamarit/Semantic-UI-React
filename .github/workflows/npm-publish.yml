@@ -8,6 +8,8 @@ on:
 jobs:
   Publish:
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: "--no-experimental-detect-module --no-experimental-require-module --openssl-legacy-provider"
 
     steps:
       - name: Checkout
