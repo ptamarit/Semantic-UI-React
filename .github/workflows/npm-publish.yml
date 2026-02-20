@@ -8,8 +8,6 @@ on:
 permissions:
   id-token: write
   pages: write
-  contents: read
-  packages: write
 
 jobs:
   Publish:
@@ -25,17 +23,21 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "20"
-          registry-url: "https://npm.pkg.github.com"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install and build
         run: |
           yarn install --frozen-lockfile
           yarn build
 
-      - name: Publish on GitHub Packages
-        run: yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Publish on npmjs
+        run: yarn pack # TODO: Replace by yarn publish
+
+      - name: Upload tarball artifact
+        uses: actions/upload-artifact@v6 # TODO: Remove action
+        with:
+          name: tarball
+          path: "*.tgz"
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
